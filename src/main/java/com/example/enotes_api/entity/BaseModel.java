@@ -20,15 +20,12 @@ public abstract class BaseModel {
     @Column(name = "created_on", updatable = false)
     private Date createdOn;
 
-//    @CreatedDate
-//    @Column(updatable = false)
-//    private Date createdOn;
-
 
     private Integer updatedBy;
 
 
     private Date updatedOn;
+
 
 
 }
