@@ -4,6 +4,7 @@ import com.example.enotes_api.dto.CategoryDto;
 import com.example.enotes_api.dto.CategoryResponse;
 import com.example.enotes_api.entity.Category;
 
+import com.example.enotes_api.exception.ResourceNotFoundException;
 import com.example.enotes_api.repository.CategoryRepository;
 import com.example.enotes_api.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -64,12 +65,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getCategoryById(Integer id) {
-        Optional<Category> category = categoryRepository.findByIdAndIsDeletedFalse(id);
+    public CategoryDto getCategoryById(Integer id) throws Exception{
+        Category category = categoryRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id=" + id));
 
-        if(category.isPresent()){
-            Category finalCategory = category.get();
-            return mapper.map(finalCategory,CategoryDto.class);
+        if(!ObjectUtils.isEmpty(category)){
+            return mapper.map(category,CategoryDto.class);
         }
         return null;
     }
