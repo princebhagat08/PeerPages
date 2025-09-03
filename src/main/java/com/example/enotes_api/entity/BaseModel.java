@@ -1,15 +1,17 @@
 package com.example.enotes_api.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
+
 
 import java.util.Date;
 
-@Getter
-@Setter
+//@Getter
+//@Setter
+@Data
 @MappedSuperclass
 public abstract class BaseModel {
 
