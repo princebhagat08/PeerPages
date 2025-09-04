@@ -41,13 +41,14 @@ public class CategoryController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id){
+    public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if(ObjectUtils.isEmpty(categoryDto)){
-            return  new ResponseEntity<>("Category not found with id=" + id, HttpStatus.NOT_FOUND);
+            return  new ResponseEntity<>("Internal server error", HttpStatus.NOT_FOUND);
         }
         return  new ResponseEntity<>(categoryDto,HttpStatus.OK);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable Integer id){
