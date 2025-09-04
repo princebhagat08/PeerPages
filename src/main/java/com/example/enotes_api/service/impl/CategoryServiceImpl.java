@@ -4,6 +4,7 @@ import com.example.enotes_api.dto.CategoryDto;
 import com.example.enotes_api.dto.CategoryResponse;
 import com.example.enotes_api.entity.Category;
 
+import com.example.enotes_api.exception.ExistDataException;
 import com.example.enotes_api.exception.ResourceNotFoundException;
 import com.example.enotes_api.repository.CategoryRepository;
 import com.example.enotes_api.service.CategoryService;
@@ -33,6 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
     public Boolean saveCategory(CategoryDto categoryDto) {
 
         validation.categoryValidation(categoryDto);
+
+        Boolean isAlreadyExist = categoryRepository.existsByName(categoryDto.getName().trim());
+
+        if(isAlreadyExist){
+            throw new ExistDataException("Category already exist");
+        }
 
         Category category = mapper.map(categoryDto, Category.class);
 

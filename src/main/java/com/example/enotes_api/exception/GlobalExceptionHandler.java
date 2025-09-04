@@ -33,5 +33,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getError(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ExistDataException.class)
+    public ResponseEntity<?> handleExistDataException(ExistDataException e){
+        log.error("GlobalExceptionHandler : handleExistDataException() : {}", e.getMessage());
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
 
 }
