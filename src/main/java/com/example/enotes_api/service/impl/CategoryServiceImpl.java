@@ -45,7 +45,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         if(ObjectUtils.isEmpty(category.getId())){
             category.setIsDeleted(false);
-//            category.setCreatedBy(11);
         }else{
             updateCategory(category);
         }
