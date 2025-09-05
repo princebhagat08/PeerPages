@@ -1,30 +1,24 @@
 package com.example.enotes_api.entity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
-@Getter
-@Setter
+@Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Category  extends  BaseModel{
+public class Notes extends BaseModel{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String title;
 
     private String description;
 
-    private Boolean isActive;
-
-    private Boolean isDeleted;
-
-
+    @ManyToOne
+    private Category category;
 }
