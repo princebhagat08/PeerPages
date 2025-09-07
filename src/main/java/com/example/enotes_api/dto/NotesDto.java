@@ -28,6 +28,21 @@ public class NotesDto {
 
     private Date updatedOn;
 
+    private FileDetailsDto file;
+
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FileDetailsDto{
+
+        private Integer id;
+
+        private String originalFileName;
+
+        private String displayFileName;
+    }
+
 
     @Data
     @NoArgsConstructor
