@@ -28,6 +28,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import java.util.UUID;
@@ -56,6 +57,8 @@ public class NotesServiceImpl implements NotesService {
 
         ObjectMapper obj = new ObjectMapper();
         NotesDto notesDto = obj.readValue(notes, NotesDto.class);
+
+        notesDto.setIsDeleted(false);
 
         if(!ObjectUtils.isEmpty(notesDto.getId())){
             updateNotes(notesDto,file);
@@ -192,7 +195,7 @@ public class NotesServiceImpl implements NotesService {
 
         PageRequest request = PageRequest.of(pageNo, pageSize);
 
-        Page<Notes> notes = notesRepository.findByCreatedBy(userId,request);
+        Page<Notes> notes = notesRepository.findByCreatedByAndIsDeletedFalse(userId,request);
 
         List<NotesDto> notesDtos = notes.get().map((notes1)->mapper.map(notes1,NotesDto.class)).toList();
 
@@ -209,4 +212,35 @@ public class NotesServiceImpl implements NotesService {
         return notesResponse;
 
     }
+
+    @Override
+    public void softDeleteNotes(Integer id) throws  Exception{
+        Notes notes = notesRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Invalid notes id"));
+        notes.setIsDeleted(true);
+        notes.setDeletedOn(new Date());
+        notesRepository.save(notes);
+
+    }
+
+    @Override
+    public void restoreNotes(Integer id) throws  Exception{
+        Notes notes = notesRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Invalid notes id"));
+        notes.setIsDeleted(false);
+        notes.setDeletedOn(null);
+        notesRepository.save(notes);
+    }
+
+    @Override
+    public List<NotesDto> getUserRecycleBinNotes(Integer userId) {
+       List<Notes> notesList = notesRepository.findByCreatedByAndIsDeletedTrue(userId);
+        List<NotesDto> notesDtoList = notesList.stream().map((
+                notes -> mapper.map(notes, NotesDto.class))).toList();
+
+        return notesDtoList;
+
+    }
+
+
 }
