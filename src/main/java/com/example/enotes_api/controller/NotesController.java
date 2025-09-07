@@ -65,10 +65,6 @@ public class NotesController {
         Integer userId = 12;
         NotesResponse allNotes = notesService.getAllNotesByUser(userId,pageNo,pageSize);
 
-//        if(CollectionUtils.isEmpty(allNotes)){
-//            return ResponseEntity.noContent().build();
-//        }
-
         return CommonUtil.createBuildResponse(allNotes,HttpStatus.OK);
     }
 
