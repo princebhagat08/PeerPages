@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.FileNotFoundException;
+
 @Slf4j
 @ControllerAdvice  // @ControllerAdvice = A way to write centralized logic for all controllers.
 public class GlobalExceptionHandler {
@@ -43,11 +45,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExistDataException.class)
     public ResponseEntity<?> handleExistDataException(ExistDataException e){
-        log.error("GlobalExceptionHandler : handleExistDataException() : {}", e.getMessage());
-//        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.CONFLICT);
+    }
 
-
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<?> handleExistDataException(FileNotFoundException e){
+        return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.NOT_FOUND);
     }
 
 
