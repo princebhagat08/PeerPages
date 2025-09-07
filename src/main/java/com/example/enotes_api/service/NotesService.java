@@ -1,6 +1,7 @@
 package com.example.enotes_api.service;
 
 import com.example.enotes_api.dto.NotesDto;
+import com.example.enotes_api.dto.NotesResponse;
 import com.example.enotes_api.entity.FileDetails;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,4 +16,6 @@ public interface NotesService {
     byte[] downloadFile(FileDetails fileDetails) throws Exception;
 
     FileDetails getFileDetails(Integer id) throws  Exception;
+
+    NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize);
 }

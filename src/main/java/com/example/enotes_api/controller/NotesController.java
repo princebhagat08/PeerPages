@@ -1,6 +1,7 @@
 package com.example.enotes_api.controller;
 
 import com.example.enotes_api.dto.NotesDto;
+import com.example.enotes_api.dto.NotesResponse;
 import com.example.enotes_api.entity.FileDetails;
 import com.example.enotes_api.service.NotesService;
 import com.example.enotes_api.utils.CommonUtil;
@@ -53,6 +54,20 @@ public class NotesController {
         if(CollectionUtils.isEmpty(allNotes)){
             return ResponseEntity.noContent().build();
         }
+
+        return CommonUtil.createBuildResponse(allNotes,HttpStatus.OK);
+    }
+
+    @GetMapping("/user-notes")
+    public ResponseEntity<?> getAllNotesByUser(
+            @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize){
+        Integer userId = 12;
+        NotesResponse allNotes = notesService.getAllNotesByUser(userId,pageNo,pageSize);
+
+//        if(CollectionUtils.isEmpty(allNotes)){
+//            return ResponseEntity.noContent().build();
+//        }
 
         return CommonUtil.createBuildResponse(allNotes,HttpStatus.OK);
     }

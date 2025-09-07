@@ -2,6 +2,7 @@ package com.example.enotes_api.service.impl;
 
 
 import com.example.enotes_api.dto.NotesDto;
+import com.example.enotes_api.dto.NotesResponse;
 import com.example.enotes_api.entity.FileDetails;
 import com.example.enotes_api.entity.Notes;
 import com.example.enotes_api.exception.ResourceNotFoundException;
@@ -14,12 +15,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.awt.print.Pageable;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -166,5 +170,28 @@ public class NotesServiceImpl implements NotesService {
     @Override
     public FileDetails getFileDetails(Integer id) throws Exception{
        return  fileRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("File not found"));
+    }
+
+    @Override
+    public NotesResponse getAllNotesByUser(Integer userId,Integer pageNo, Integer pageSize) {
+
+        PageRequest request = PageRequest.of(pageNo, pageSize);
+
+        Page<Notes> notes = notesRepository.findByCreatedBy(userId,request);
+
+        List<NotesDto> notesDtos = notes.get().map((notes1)->mapper.map(notes1,NotesDto.class)).toList();
+
+        NotesResponse notesResponse = NotesResponse.builder()
+                .notes(notesDtos)
+                .pageSize(notes.getSize())
+                .pageNo(notes.getNumber())
+                .isFirst(notes.isFirst())
+                .isLast(notes.isLast())
+                .totalElements(notes.getTotalElements())
+                .totalPages(notes.getTotalPages())
+                .build();
+
+        return notesResponse;
+
     }
 }
