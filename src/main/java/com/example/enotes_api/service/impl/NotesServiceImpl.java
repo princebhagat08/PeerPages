@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import java.awt.print.Pageable;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -218,7 +220,7 @@ public class NotesServiceImpl implements NotesService {
         Notes notes = notesRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Invalid notes id"));
         notes.setIsDeleted(true);
-        notes.setDeletedOn(new Date());
+        notes.setDeletedOn(LocalDateTime.now());
         notesRepository.save(notes);
 
     }
@@ -240,6 +242,28 @@ public class NotesServiceImpl implements NotesService {
 
         return notesDtoList;
 
+    }
+
+    @Override
+    public void hardDeleteNotes(Integer id) throws Exception {
+        Notes notes = notesRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Invalid notes id"));
+
+        if(notes.getIsDeleted()){
+            notesRepository.delete(notes);
+        }else {
+            throw new IllegalArgumentException("Sorry you cannot hard delete directly");
+        }
+
+    }
+
+    @Override
+    public void emptyRecycleBin(Integer userId) throws Exception {
+        List<Notes> notesList = notesRepository.findByCreatedByAndIsDeletedTrue(userId);
+
+        if(!CollectionUtils.isEmpty(notesList)){
+            notesRepository.deleteAll(notesList);
+        }
     }
 
 
