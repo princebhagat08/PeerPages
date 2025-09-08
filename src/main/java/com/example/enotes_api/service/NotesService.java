@@ -1,11 +1,13 @@
 package com.example.enotes_api.service;
 
+import com.example.enotes_api.dto.FavouriteNotesDto;
 import com.example.enotes_api.dto.NotesDto;
 import com.example.enotes_api.dto.NotesResponse;
 import com.example.enotes_api.entity.FileDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public interface NotesService {
 
@@ -28,4 +30,12 @@ public interface NotesService {
     void hardDeleteNotes(Integer id) throws Exception;
 
     void emptyRecycleBin(Integer userId) throws  Exception;
+
+    void favouriteNotes(Integer notesId) throws  Exception;
+
+    void unFavouriteNotes(Integer favouriteNotesId) throws  Exception;
+
+    List<FavouriteNotesDto> getUserFavouriteNotes() throws Exception;
+
+
 }
