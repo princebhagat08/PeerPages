@@ -15,13 +15,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e){
-//        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<?> handleNullPointerException(Exception e){
-//        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
@@ -29,7 +27,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> handleResourceNotFoundException(Exception e){
         log.error("GlobalExceptionHandler : handleResourceNotFoundException() : {}", e.getMessage());
-//        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.NOT_FOUND);
 
     }
@@ -38,7 +35,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<?> handleValidationException(ValidationException e){
         log.error("GlobalExceptionHandler : handleValidationException() : {}", e.getMessage());
-//        return new ResponseEntity<>(e.getError(), HttpStatus.BAD_REQUEST);
         return CommonUtil.createErrorResponse(e.getError(),HttpStatus.BAD_REQUEST);
 
     }
@@ -51,6 +47,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<?> handleExistDataException(FileNotFoundException e){
         return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e){
+        return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
 
