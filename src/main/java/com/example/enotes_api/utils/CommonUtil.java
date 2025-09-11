@@ -1,6 +1,7 @@
 package com.example.enotes_api.utils;
 
 import com.example.enotes_api.handler.GenericResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,11 @@ public class CommonUtil {
             default:
                 return "application/octet-stream";
         }
+    }
+
+    public static String getUrl(HttpServletRequest request) {
+        String url = request.getRequestURL().toString();
+        url = url.replace(request.getServletPath(),"");
+        return url;
     }
 }
