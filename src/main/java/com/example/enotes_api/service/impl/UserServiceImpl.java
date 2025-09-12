@@ -1,6 +1,12 @@
 package com.example.enotes_api.service.impl;
 
+
 import com.example.enotes_api.dto.EmailRequest;
+
+import com.example.enotes_api.config.security.CustomUserDetails;
+import com.example.enotes_api.dto.LoginRequest;
+import com.example.enotes_api.dto.LoginResponse;
+
 import com.example.enotes_api.dto.UserDto;
 import com.example.enotes_api.entity.AccountStatus;
 import com.example.enotes_api.entity.Role;
@@ -12,6 +18,10 @@ import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -34,7 +44,15 @@ public class UserServiceImpl implements UserService {
     private ModelMapper mapper;
 
     @Autowired
+
     private EmailService emailService;
+
+    private BCryptPasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
 
     @Override
     public boolean register(UserDto userDto,String url) throws Exception {
@@ -45,11 +63,16 @@ public class UserServiceImpl implements UserService {
 
         setRole(userDto,user);
 
+
         AccountStatus status = AccountStatus.builder()
                 .isActive(false)
                 .verificationCode(UUID.randomUUID().toString())
                 .build();
         user.setStatus(status);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
         User save = userRepo.save(user);
 
         if(!ObjectUtils.isEmpty(save)){
@@ -61,6 +84,7 @@ public class UserServiceImpl implements UserService {
 
 
     }
+
 
     private void emailSend(User user, String url) throws Exception{
 
@@ -81,6 +105,29 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         emailService.send(emailRequest);
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+        if(authenticate.isAuthenticated()){
+
+            CustomUserDetails userDetails = (CustomUserDetails) authenticate.getPrincipal();
+
+            String token = "kalkjfaljdljalgajdgeklajlkgj";
+            LoginResponse loginResponse = LoginResponse.builder()
+                    .token(token)
+                    .user(mapper.map(userDetails.getUser(),UserDto.class))
+                    .build();
+
+            return loginResponse;
+        }
+
+        return null;
+
+
     }
 
     private void setRole(UserDto userDto,User user) {

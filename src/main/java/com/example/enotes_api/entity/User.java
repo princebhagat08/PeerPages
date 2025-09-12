@@ -27,7 +27,7 @@ public class User {
 
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
