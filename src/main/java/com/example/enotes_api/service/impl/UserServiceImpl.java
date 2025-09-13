@@ -14,6 +14,7 @@ import com.example.enotes_api.entity.User;
 import com.example.enotes_api.repository.RoleRepository;
 import com.example.enotes_api.repository.UserRepository;
 import com.example.enotes_api.service.EmailService;
+import com.example.enotes_api.service.JwtService;
 import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.Validation;
 import org.modelmapper.ModelMapper;
@@ -44,14 +45,16 @@ public class UserServiceImpl implements UserService {
     private ModelMapper mapper;
 
     @Autowired
-
     private EmailService emailService;
 
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
 
     @Override
@@ -68,6 +71,7 @@ public class UserServiceImpl implements UserService {
                 .isActive(false)
                 .verificationCode(UUID.randomUUID().toString())
                 .build();
+
         user.setStatus(status);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -116,7 +120,7 @@ public class UserServiceImpl implements UserService {
 
             CustomUserDetails userDetails = (CustomUserDetails) authenticate.getPrincipal();
 
-            String token = "kalkjfaljdljalgajdgeklajlkgj";
+            String token = jwtService.generateToken(userDetails.getUser());
             LoginResponse loginResponse = LoginResponse.builder()
                     .token(token)
                     .user(mapper.map(userDetails.getUser(),UserDto.class))
