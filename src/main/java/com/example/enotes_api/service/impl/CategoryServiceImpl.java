@@ -56,6 +56,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+    @Override
+    public List<CategoryResponse> getAllCategory() {
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryResponse> categoryResponses =  categories.stream().map(
+                cat -> mapper.map(cat, CategoryResponse.class)).toList();
+        return categoryResponses;
+    }
+
 
 
     @Override
@@ -88,6 +96,8 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return  false;
     }
+
+
 
 
 }

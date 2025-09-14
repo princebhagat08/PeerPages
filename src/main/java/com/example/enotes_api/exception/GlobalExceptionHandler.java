@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.FileNotFoundException;
+import java.nio.file.AccessDeniedException;
 
 @Slf4j
 @ControllerAdvice  // @ControllerAdvice = A way to write centralized logic for all controllers.
@@ -17,6 +18,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e){
         return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e){
+        return CommonUtil.createErrorResponseMessage(e.getMessage(),HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(NullPointerException.class)
