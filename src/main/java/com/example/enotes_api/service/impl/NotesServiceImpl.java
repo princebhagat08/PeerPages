@@ -13,6 +13,7 @@ import com.example.enotes_api.repository.FavouriteNotesRepository;
 import com.example.enotes_api.repository.FileRepository;
 import com.example.enotes_api.repository.NotesRepository;
 import com.example.enotes_api.service.NotesService;
+import com.example.enotes_api.utils.CommonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
@@ -183,6 +184,8 @@ public class NotesServiceImpl implements NotesService {
                 .map(note->mapper.map(note,NotesDto.class)).toList();
     }
 
+
+
     @Override
     public byte[] downloadFile(FileDetails fileDetails) throws Exception {
 
@@ -191,13 +194,18 @@ public class NotesServiceImpl implements NotesService {
         return StreamUtils.copyToByteArray(io);
     }
 
+
+
     @Override
     public FileDetails getFileDetails(Integer id) throws Exception{
        return  fileRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("File not found"));
     }
 
+
+
     @Override
-    public NotesResponse getAllNotesByUser(Integer userId,Integer pageNo, Integer pageSize) {
+    public NotesResponse getAllNotesByUser(Integer pageNo, Integer pageSize) {
+        Integer userId = CommonUtil.getLoggedInUser().getId();
 
         PageRequest request = PageRequest.of(pageNo, pageSize);
 
@@ -239,7 +247,8 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public List<NotesDto> getUserRecycleBinNotes(Integer userId) {
+    public List<NotesDto> getUserRecycleBinNotes() {
+        Integer userId = CommonUtil.getLoggedInUser().getId();
        List<Notes> notesList = notesRepository.findByCreatedByAndIsDeletedTrue(userId);
         List<NotesDto> notesDtoList = notesList.stream().map((
                 notes -> mapper.map(notes, NotesDto.class))).toList();
@@ -262,7 +271,8 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public void emptyRecycleBin(Integer userId) throws Exception {
+    public void emptyRecycleBin() throws Exception {
+        Integer userId = CommonUtil.getLoggedInUser().getId();
         List<Notes> notesList = notesRepository.findByCreatedByAndIsDeletedTrue(userId);
 
         if(!CollectionUtils.isEmpty(notesList)){
@@ -272,7 +282,7 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public void favouriteNotes(Integer id) throws  Exception{
-        Integer userId = 12;
+        Integer userId = CommonUtil.getLoggedInUser().getId();
         Notes notes = notesRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Notes not found"));
 
@@ -295,7 +305,7 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public List<FavouriteNotesDto> getUserFavouriteNotes() throws Exception{
-        Integer userId = 12;
+        Integer userId = CommonUtil.getLoggedInUser().getId();
 
         List<FavouriteNotes> favouriteNotes = favouriteNotesRepository.findByUserId(userId);
 

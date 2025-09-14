@@ -1,19 +1,19 @@
 package com.example.enotes_api.dto;
-import com.example.enotes_api.entity.Role;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
-public class UserDto {
+public class UserResponse {
 
     private Integer id;
 
@@ -25,18 +25,27 @@ public class UserDto {
 
     private String mobNo;
 
-    private String password;
+    private StatusDto status;
 
     private List<RoleDto> roles;
 
-
-    @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RoleDto{
-
+    @Getter
+    @Setter
+    @Builder
+    public static class RoleDto {
         private Integer id;
-
         private String name;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @Builder
+    public static class StatusDto {
+        private Integer id;
+        private Boolean isActive;
     }
 }

@@ -2,7 +2,7 @@ package com.example.enotes_api.controller;
 
 import com.example.enotes_api.dto.LoginRequest;
 import com.example.enotes_api.dto.LoginResponse;
-import com.example.enotes_api.dto.UserDto;
+import com.example.enotes_api.dto.UserRequest;
 import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +24,10 @@ public class AuthController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> registerUser(@RequestBody UserRequest userRequest, HttpServletRequest request) throws Exception {
         String url = CommonUtil.getUrl(request);
 
-        boolean registered = userService.register(userDto,url);
+        boolean registered = userService.register(userRequest,url);
         if(registered){
             return CommonUtil.createBuildResponseMessage("Register successfully", HttpStatus.CREATED);
         }
