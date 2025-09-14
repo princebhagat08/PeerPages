@@ -7,6 +7,7 @@ import com.example.enotes_api.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,8 @@ public class CategoryController {
 
 
 
-    @PostMapping("/save-category")
+    @PostMapping("/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
         Boolean isSaved = categoryService.saveCategory(categoryDto);
         return isSaved ?
@@ -30,9 +32,21 @@ public class CategoryController {
     }
 
 
+    @GetMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllCategory(){
+        List<CategoryResponse> allCategory = categoryService.getAllCategory();
+        if(CollectionUtils.isEmpty(allCategory)){
+            return CommonUtil.createErrorResponseMessage("No category found",HttpStatus.NO_CONTENT);
+        }
+        return CommonUtil.createBuildResponse(allCategory,HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/active")
-    public ResponseEntity<?> getAllCategory(){
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> getActiveCategory(){
         List<CategoryResponse> allCategory = categoryService.getActiveCategory();
         if(CollectionUtils.isEmpty(allCategory)){
             return CommonUtil.createErrorResponseMessage("No category found",HttpStatus.NO_CONTENT);
@@ -43,6 +57,7 @@ public class CategoryController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if(ObjectUtils.isEmpty(categoryDto)){
@@ -54,6 +69,7 @@ public class CategoryController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCategory(@PathVariable Integer id){
         Boolean isDeleted = categoryService.deleteCategory(id);
         if(isDeleted){
