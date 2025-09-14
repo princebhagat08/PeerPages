@@ -3,11 +3,11 @@ package com.example.enotes_api.service;
 
 import com.example.enotes_api.dto.LoginRequest;
 import com.example.enotes_api.dto.LoginResponse;
-import com.example.enotes_api.dto.UserDto;
+import com.example.enotes_api.dto.UserRequest;
 
 public interface UserService {
 
-    public boolean register(UserDto userDto,String url) throws Exception;
+    public boolean register(UserRequest userRequest, String url) throws Exception;
 
 
     LoginResponse login(LoginRequest loginRequest);
