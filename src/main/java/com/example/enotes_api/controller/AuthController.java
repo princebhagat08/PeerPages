@@ -3,7 +3,7 @@ package com.example.enotes_api.controller;
 import com.example.enotes_api.dto.LoginRequest;
 import com.example.enotes_api.dto.LoginResponse;
 import com.example.enotes_api.dto.UserRequest;
-import com.example.enotes_api.service.UserService;
+import com.example.enotes_api.service.AuthService;
 import com.example.enotes_api.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
 
     @PostMapping("/")
     public ResponseEntity<?> registerUser(@RequestBody UserRequest userRequest, HttpServletRequest request) throws Exception {
         String url = CommonUtil.getUrl(request);
 
-        boolean registered = userService.register(userRequest,url);
+        boolean registered = authService.register(userRequest,url);
         if(registered){
             return CommonUtil.createBuildResponseMessage("Register successfully", HttpStatus.CREATED);
         }
@@ -36,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        LoginResponse login = userService.login(loginRequest);
+        LoginResponse login = authService.login(loginRequest);
         if(ObjectUtils.isEmpty(login)){
             return CommonUtil.createErrorResponseMessage("Invalid credentials",HttpStatus.BAD_REQUEST);
         }

@@ -1,16 +1,16 @@
 package com.example.enotes_api.controller;
 
+import com.example.enotes_api.dto.PasswordChangeRequest;
 import com.example.enotes_api.dto.UserRequest;
 import com.example.enotes_api.dto.UserResponse;
 import com.example.enotes_api.entity.User;
+import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.CommonUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -18,6 +18,9 @@ public class UserController {
 
     @Autowired
     private ModelMapper mapper;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(){
@@ -27,4 +30,12 @@ public class UserController {
         return CommonUtil.createBuildResponse(userResponse, HttpStatus.OK);
 
     }
+
+    @PostMapping("/chng-pswd")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest changeRequest){
+
+        userService.changePassword(changeRequest);
+        return CommonUtil.createBuildResponseMessage("Password change successfully", HttpStatus.OK);
+    }
+
 }
