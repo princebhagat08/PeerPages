@@ -3,6 +3,7 @@ package com.example.enotes_api.controller;
 import com.example.enotes_api.dto.PasswordChangeRequest;
 import com.example.enotes_api.dto.UserRequest;
 import com.example.enotes_api.dto.UserResponse;
+import com.example.enotes_api.endpoint.UserEndpoint;
 import com.example.enotes_api.entity.User;
 import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.CommonUtil;
@@ -13,8 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/user")
-public class UserController {
+public class UserController implements UserEndpoint {
 
     @Autowired
     private ModelMapper mapper;
@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/profile")
+    @Override
     public ResponseEntity<?> getProfile(){
 
         User user = CommonUtil.getLoggedInUser();
@@ -31,7 +31,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/chng-pswd")
+    @Override
     public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest changeRequest){
 
         userService.changePassword(changeRequest);
