@@ -1,4 +1,4 @@
-package com.example.enotes_api.service;
+package com.example.enotes_api.service.impl;
 
 import com.example.enotes_api.dto.EmailRequest;
 import jakarta.mail.internet.MimeMessage;

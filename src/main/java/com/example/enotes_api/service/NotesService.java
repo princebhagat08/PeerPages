@@ -21,6 +21,8 @@ public interface NotesService {
 
     NotesResponse getAllNotesByUser( Integer pageNo, Integer pageSize);
 
+    public NotesResponse getNotesByUserSearch(Integer pageNo, Integer pageSize,String keyword);
+
     void softDeleteNotes(Integer id) throws  Exception;
 
     void restoreNotes(Integer id) throws Exception;

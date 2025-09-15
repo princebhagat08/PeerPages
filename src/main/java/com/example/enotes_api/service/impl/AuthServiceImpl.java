@@ -10,7 +10,6 @@ import com.example.enotes_api.entity.Role;
 import com.example.enotes_api.entity.User;
 import com.example.enotes_api.repository.RoleRepository;
 import com.example.enotes_api.repository.UserRepository;
-import com.example.enotes_api.service.EmailService;
 import com.example.enotes_api.service.JwtService;
 import com.example.enotes_api.service.AuthService;
 import com.example.enotes_api.utils.Validation;
