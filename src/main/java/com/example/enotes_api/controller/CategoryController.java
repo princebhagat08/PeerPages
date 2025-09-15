@@ -2,7 +2,9 @@ package com.example.enotes_api.controller;
 
 import com.example.enotes_api.dto.CategoryDto;
 import com.example.enotes_api.dto.CategoryResponse;
+import com.example.enotes_api.dto.NotesResponse;
 import com.example.enotes_api.service.CategoryService;
+import com.example.enotes_api.service.NotesService;
 import com.example.enotes_api.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,6 +79,8 @@ public class CategoryController {
         }
         return  CommonUtil.createErrorResponseMessage("Category not deleted",HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 
 
 }

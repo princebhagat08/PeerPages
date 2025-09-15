@@ -7,7 +7,6 @@ import com.example.enotes_api.entity.User;
 import com.example.enotes_api.exception.ResourceNotFoundException;
 import com.example.enotes_api.exception.SuccessException;
 import com.example.enotes_api.repository.UserRepository;
-import com.example.enotes_api.service.EmailService;
 import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
