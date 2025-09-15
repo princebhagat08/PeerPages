@@ -2,7 +2,11 @@ package com.example.enotes_api.controller;
 
 import com.example.enotes_api.dto.CategoryDto;
 import com.example.enotes_api.dto.CategoryResponse;
+
+import com.example.enotes_api.endpoint.CategoryEndpoint;
+
 import com.example.enotes_api.dto.NotesResponse;
+
 import com.example.enotes_api.service.CategoryService;
 import com.example.enotes_api.service.NotesService;
 import com.example.enotes_api.utils.CommonUtil;
@@ -17,15 +21,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/category")
-public class CategoryController {
+public class CategoryController implements CategoryEndpoint {
 
     @Autowired
     private CategoryService categoryService;
 
 
 
-    @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Override
     public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
         Boolean isSaved = categoryService.saveCategory(categoryDto);
         return isSaved ?
@@ -34,8 +37,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Override
     public ResponseEntity<?> getAllCategory(){
         List<CategoryResponse> allCategory = categoryService.getAllCategory();
         if(CollectionUtils.isEmpty(allCategory)){
@@ -46,8 +48,7 @@ public class CategoryController {
 
 
 
-    @GetMapping("/active")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @Override
     public ResponseEntity<?> getActiveCategory(){
         List<CategoryResponse> allCategory = categoryService.getActiveCategory();
         if(CollectionUtils.isEmpty(allCategory)){
@@ -57,9 +58,7 @@ public class CategoryController {
     }
 
 
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Override
     public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if(ObjectUtils.isEmpty(categoryDto)){
@@ -70,8 +69,7 @@ public class CategoryController {
     }
 
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Override
     public ResponseEntity<?> deleteCategory(@PathVariable Integer id){
         Boolean isDeleted = categoryService.deleteCategory(id);
         if(isDeleted){

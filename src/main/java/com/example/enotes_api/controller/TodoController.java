@@ -1,6 +1,7 @@
 package com.example.enotes_api.controller;
 
 import com.example.enotes_api.dto.TodoDto;
+import com.example.enotes_api.endpoint.TodoEndpoint;
 import com.example.enotes_api.service.TodoService;
 import com.example.enotes_api.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/todo")
-public class TodoController {
+public class TodoController implements TodoEndpoint {
 
     @Autowired
     private TodoService todoService;
 
-    @PostMapping("/")
-    @PreAuthorize("hasRole('USER')")
+    @Override
     public ResponseEntity<?> saveTodo(@RequestBody TodoDto todoDto) throws Exception{
         boolean saveTodo = todoService.saveTodo(todoDto);
         if(saveTodo){
@@ -31,8 +30,7 @@ public class TodoController {
         }
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @Override
     public ResponseEntity<?> getTodo(@PathVariable Integer id) throws  Exception{
         TodoDto todoById = todoService.getTodoById(id);
         if(!ObjectUtils.isEmpty(todoById)){
@@ -43,8 +41,7 @@ public class TodoController {
     }
 
 
-    @GetMapping("/list")
-    @PreAuthorize("hasRole('USER')")
+    @Override
     public ResponseEntity<?> getTodoByUser() throws  Exception{
         List<TodoDto> todoByUser = todoService.getTodoByUser();
         if(!CollectionUtils.isEmpty(todoByUser)){

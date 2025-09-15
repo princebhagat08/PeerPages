@@ -1,6 +1,7 @@
 package com.example.enotes_api.controller;
 
 import com.example.enotes_api.dto.PasswordResetRequest;
+import com.example.enotes_api.endpoint.HomeEndpoint;
 import com.example.enotes_api.service.HomeService;
 import com.example.enotes_api.service.UserService;
 import com.example.enotes_api.utils.CommonUtil;
@@ -12,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/home")
-public class HomeController {
+public class HomeController implements HomeEndpoint {
 
     @Autowired
     private HomeService homeService;
@@ -21,7 +21,7 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/verify")
+    @Override
     public ResponseEntity<?> verifyUserAccount(@RequestParam Integer uid, @RequestParam String code)throws Exception{
 
         Boolean verifyAccount = homeService.verifyAccount(uid, code);
@@ -32,21 +32,21 @@ public class HomeController {
     }
 
 
-    @GetMapping("/send-reset-email")
+    @Override
     public ResponseEntity<?> sendResendEmail(@RequestParam String email, HttpServletRequest request) throws  Exception{
         userService.sendPasswordResetEmail(email,request);
         return CommonUtil.createBuildResponseMessage("Check email and reset password",HttpStatus.OK);
     }
 
 
-    @GetMapping("/verify-reset-pswd")
+    @Override
     public ResponseEntity<?> verifyPasswordResetLink(@RequestParam Integer uid, @RequestParam String code) throws Exception {
         userService.verifyPasswordResetLink(uid,code);
         return CommonUtil.createBuildResponseMessage("verification success",HttpStatus.OK);
     }
 
 
-    @PostMapping("/reset-pswd")
+    @Override
     public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest resetRequest) throws Exception{
         userService.resetPassword(resetRequest);
         return  CommonUtil.createBuildResponseMessage("Password reset successfully",HttpStatus.OK);
