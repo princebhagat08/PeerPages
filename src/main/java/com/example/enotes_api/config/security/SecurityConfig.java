@@ -54,7 +54,7 @@ public class SecurityConfig {
 
         http.csrf(csfr->csfr.disable())
                 .authorizeHttpRequests(req->
-                        req.requestMatchers("/api/v1/home/**","/api/v1/auth/**").permitAll()
+                        req.requestMatchers("/api/v1/home/**","/api/v1/auth/**","/swagger-ui/**","v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session->
