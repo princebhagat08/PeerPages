@@ -24,7 +24,7 @@ public class AuthController implements AuthEndpoint {
 
 
     @Override
-    public ResponseEntity<?> registerUser(@RequestBody UserRequest userRequest, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> registerUser(UserRequest userRequest, HttpServletRequest request) throws Exception {
         String url = CommonUtil.getUrl(request);
 
         boolean registered = authService.register(userRequest,url);
@@ -35,7 +35,7 @@ public class AuthController implements AuthEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login(LoginRequest loginRequest){
         LoginResponse login = authService.login(loginRequest);
         if(ObjectUtils.isEmpty(login)){
             return CommonUtil.createErrorResponseMessage("Invalid credentials",HttpStatus.BAD_REQUEST);

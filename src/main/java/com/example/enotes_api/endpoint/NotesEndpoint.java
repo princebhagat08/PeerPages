@@ -5,63 +5,70 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.example.enotes_api.utils.Constants.*;
+
 @RequestMapping("/api/v1/notes")
 public interface NotesEndpoint {
 
     @PostMapping("/")
-    @PreAuthorize("hasRole('USER')")
-    ResponseEntity<?> saveNotes(@RequestParam String notes,
-                                       @RequestParam(required = false) MultipartFile file) throws Exception;
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> saveNotes(@RequestParam String notes,@RequestParam(required = false) MultipartFile file) throws Exception;
 
     @GetMapping("/download/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize(ROLE_ADMIN_USER)
     ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception;
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ROLE_ADMIN)
     ResponseEntity<?> getAllNotes();
 
 
 
 
     @GetMapping("/user-notes")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getAllNotesByUser(
-            @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize);
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> getAllNotesByUser(
+            @RequestParam(name = "pageNo", defaultValue = DEFAULT_PAGE_NO) Integer pageNo,
+            @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize);
 
 
     @GetMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception;
+    @PreAuthorize(ROLE_ADMIN_USER)
+    ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception;
 
     @GetMapping("/restore/{id}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception;
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception;
 
     @GetMapping("/recycle-bin")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getUserRecycleBinNotes() throws Exception;
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> getUserRecycleBinNotes() throws Exception;
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception;
+    @PreAuthorize(ROLE_ADMIN_USER)
+    ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception;
 
 
     @DeleteMapping("/delete-all")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> emptyRecycleBin() throws Exception;
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> emptyRecycleBin() throws Exception;
 
     @GetMapping("/fav/{notesId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> favouriteNotes(@PathVariable Integer notesId) throws  Exception;
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> favouriteNotes(@PathVariable Integer notesId) throws  Exception;
 
     @DeleteMapping("/un-fav-notes/{favNotesId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> unFavouriteNotes(@PathVariable Integer favNotesId) throws  Exception;
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> unFavouriteNotes(@PathVariable Integer favNotesId) throws  Exception;
 
     @GetMapping("/fav-notes")
+    @PreAuthorize(ROLE_USER)
+    ResponseEntity<?> getFavouriteNotes() throws  Exception;
+
+    @GetMapping("/search")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getFavouriteNotes() throws  Exception;
+    ResponseEntity<?> searchNotes( @RequestParam(name = "key",defaultValue = "") String key,
+                                   @RequestParam(name = "pageNo",defaultValue = DEFAULT_PAGE_NO) Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize);
 
 }

@@ -22,7 +22,7 @@ public class HomeController implements HomeEndpoint {
     private UserService userService;
 
     @Override
-    public ResponseEntity<?> verifyUserAccount(@RequestParam Integer uid, @RequestParam String code)throws Exception{
+    public ResponseEntity<?> verifyUserAccount(Integer uid,  String code)throws Exception{
 
         Boolean verifyAccount = homeService.verifyAccount(uid, code);
         if(verifyAccount){
@@ -33,21 +33,21 @@ public class HomeController implements HomeEndpoint {
 
 
     @Override
-    public ResponseEntity<?> sendResendEmail(@RequestParam String email, HttpServletRequest request) throws  Exception{
+    public ResponseEntity<?> sendResendEmail( String email, HttpServletRequest request) throws  Exception{
         userService.sendPasswordResetEmail(email,request);
         return CommonUtil.createBuildResponseMessage("Check email and reset password",HttpStatus.OK);
     }
 
 
     @Override
-    public ResponseEntity<?> verifyPasswordResetLink(@RequestParam Integer uid, @RequestParam String code) throws Exception {
+    public ResponseEntity<?> verifyPasswordResetLink(Integer uid,  String code) throws Exception {
         userService.verifyPasswordResetLink(uid,code);
         return CommonUtil.createBuildResponseMessage("verification success",HttpStatus.OK);
     }
 
 
     @Override
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest resetRequest) throws Exception{
+    public ResponseEntity<?> resetPassword( PasswordResetRequest resetRequest) throws Exception{
         userService.resetPassword(resetRequest);
         return  CommonUtil.createBuildResponseMessage("Password reset successfully",HttpStatus.OK);
     }

@@ -29,7 +29,7 @@ public class CategoryController implements CategoryEndpoint {
 
 
     @Override
-    public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<?> saveCategory(CategoryDto categoryDto){
         Boolean isSaved = categoryService.saveCategory(categoryDto);
         return isSaved ?
                 CommonUtil.createBuildResponseMessage("Saved Successfully",HttpStatus.CREATED):
@@ -59,7 +59,7 @@ public class CategoryController implements CategoryEndpoint {
 
 
     @Override
-    public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> getCategoryDetailsById( Integer id) throws Exception {
         CategoryDto categoryDto = categoryService.getCategoryById(id);
         if(ObjectUtils.isEmpty(categoryDto)){
             return CommonUtil.createErrorResponseMessage("Internal server error",HttpStatus.NOT_FOUND);
@@ -70,7 +70,7 @@ public class CategoryController implements CategoryEndpoint {
 
 
     @Override
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer id){
+    public ResponseEntity<?> deleteCategory( Integer id){
         Boolean isDeleted = categoryService.deleteCategory(id);
         if(isDeleted){
             return CommonUtil.createBuildResponseMessage("Category deleted successfully",HttpStatus.OK);

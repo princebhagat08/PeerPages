@@ -4,29 +4,31 @@ import com.example.enotes_api.dto.CategoryDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import static com.example.enotes_api.utils.Constants.ROLE_ADMIN;
+import static com.example.enotes_api.utils.Constants.ROLE_ADMIN_USER;
 
 @RequestMapping("/api/v1/category")
 public interface CategoryEndpoint {
 
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ROLE_ADMIN)
     ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto);
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ROLE_ADMIN)
     ResponseEntity<?> getAllCategory();
 
     @GetMapping("/active")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize(ROLE_ADMIN_USER)
     ResponseEntity<?> getActiveCategory();
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ROLE_ADMIN)
     ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception;
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ROLE_ADMIN)
     ResponseEntity<?> deleteCategory(@PathVariable Integer id);
 
 }

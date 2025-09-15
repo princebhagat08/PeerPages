@@ -26,8 +26,7 @@ public class NotesController implements NotesEndpoint {
     private NotesService notesService;
 
     @Override
-    public ResponseEntity<?> saveNotes(@RequestParam String notes,
-                                       @RequestParam(required = false) MultipartFile file) throws Exception {
+    public ResponseEntity<?> saveNotes(String notes,MultipartFile file) throws Exception {
         Boolean saveNotes = notesService.saveNotes(notes,file);
 
         return saveNotes ? CommonUtil.createBuildResponseMessage("Notes saved success", HttpStatus.CREATED) :
@@ -35,7 +34,7 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception{
+    public ResponseEntity<?> downloadFile(Integer id) throws Exception{
 
         FileDetails fileDetails = notesService.getFileDetails(id);
 
@@ -61,9 +60,7 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> getAllNotesByUser(
-            @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize){
+    public ResponseEntity<?> getAllNotesByUser(Integer pageNo, Integer pageSize){
 
         NotesResponse allNotes = notesService.getAllNotesByUser(pageNo,pageSize);
 
@@ -71,13 +68,13 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws Exception{
+    public ResponseEntity<?> deleteNotes(Integer id) throws Exception{
         notesService.softDeleteNotes(id);
         return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws Exception{
+    public ResponseEntity<?> restoreNotes( Integer id) throws Exception{
 
         notesService.restoreNotes(id);
         return CommonUtil.createBuildResponseMessage("Restore Success", HttpStatus.OK);
@@ -97,7 +94,7 @@ public class NotesController implements NotesEndpoint {
 
 
     @Override
-    public ResponseEntity<?> hardDeleteNotes(@PathVariable Integer id) throws Exception{
+    public ResponseEntity<?> hardDeleteNotes(Integer id) throws Exception{
         notesService.hardDeleteNotes(id);
         return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
     }
@@ -110,13 +107,13 @@ public class NotesController implements NotesEndpoint {
     }
 
     @Override
-    public ResponseEntity<?> favouriteNotes(@PathVariable Integer notesId) throws  Exception{
+    public ResponseEntity<?> favouriteNotes( Integer notesId) throws  Exception{
         notesService.favouriteNotes(notesId);
         return CommonUtil.createBuildResponseMessage("Notes added to favourite",HttpStatus.CREATED);
    }
 
     @Override
-   public ResponseEntity<?> unFavouriteNotes(@PathVariable Integer favNotesId) throws  Exception{
+   public ResponseEntity<?> unFavouriteNotes( Integer favNotesId) throws  Exception{
         notesService.unFavouriteNotes(favNotesId);
         return CommonUtil.createBuildResponseMessage("Notes remove from favourite",HttpStatus.OK);
    }
@@ -131,11 +128,8 @@ public class NotesController implements NotesEndpoint {
         return CommonUtil.createBuildResponse(userFavouriteNotes,HttpStatus.CREATED);
     }
 
-    @GetMapping("/search")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> searchNotes(@RequestParam(name = "key",defaultValue = "") String key,
-                                         @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
-                                         @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+   @Override
+    public ResponseEntity<?> searchNotes( String key,Integer pageNo,Integer pageSize) {
         NotesResponse notes = notesService.getNotesByUserSearch(pageNo, pageSize,key);
         return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
     }
