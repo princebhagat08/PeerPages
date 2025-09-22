@@ -58,7 +58,8 @@ public class SecurityConfig {
                                         "/api/v1/auth/**",
                                         "/swagger-ui/**",
                                         "v3/api-docs/**",
-                                        "/actuator/**").permitAll()
+                                        "/actuator/**",
+                                        "/api/v1/cache/**").permitAll()
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session->
